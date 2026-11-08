@@ -139,13 +139,13 @@ tmux_conf_theme_focused_pane_bg="$tmux_conf_theme_colour_2"
 # pane border style, possible values are:
 #   - thin (default)
 #   - fat
-tmux_conf_theme_pane_border_style=thin
+tmux_conf_theme_pane_border_style=fat
 
 # pane borders colours:
 tmux_conf_theme_pane_border="$tmux_conf_theme_colour_2"
-tmux_conf_theme_pane_active_border="$tmux_conf_theme_colour_4"
+tmux_conf_theme_pane_active_border="#005f87"
 %if #{>=:#{version},3.2}
-tmux_conf_theme_pane_active_border="#{?pane_in_mode,$tmux_conf_theme_colour_9,#{?synchronize-panes,$tmux_conf_theme_colour_16,$tmux_conf_theme_colour_4}}"
+tmux_conf_theme_pane_active_border="#{?pane_in_mode,$tmux_conf_theme_colour_9,#{?synchronize-panes,$tmux_conf_theme_colour_16,#005f87}}"
 %endif
 
 # pane indicator colours (when you hit <prefix> q)
@@ -547,3 +547,16 @@ bind -n C-l send-keys C-l
 
 bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null"
 bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -i -sel clip > /dev/null"
+
+# Show the window index, name, and running command
+set -g status-interval 1
+set -g window-status-format '#I:#W [#("$HOME/.tmux/scripts/pane-command.sh" #{pane_pid} #{pane_current_command})]'
+
+set -g window-status-current-format '#I:#W [#("$HOME/.tmux/scripts/pane-command.sh" #{pane_pid} #{pane_current_command})]'
+
+# Disable automatic window renaming
+set -g automatic-rename off
+
+# Show pane information in the border
+set -g pane-border-status top
+set -g pane-border-format '#[fg=#e4e4e4,bg=default] #{pane_index}: #{pane_current_path} [#("$HOME/.tmux/scripts/pane-command.sh" #{pane_pid} #{pane_current_command})] #[default]'
